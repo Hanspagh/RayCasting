@@ -2,8 +2,9 @@
 public class Player {
 	double x;
 	double y;
+	double z = 0;
 	double direction;
-	private double paces;
+	double paces;
 	
 	
 	public Player(double x, double y, double direction) {
@@ -29,6 +30,8 @@ public class Player {
 		    if (controls.right) this.rotate(Math.PI * seconds*2);
 		    if (controls.forward) this.walk(8 * seconds, map);
 		    if (controls.backward) this.walk(-8 * seconds, map);
+		    if (controls.space && z == 0) z = z + 0.7 >= 1.1 ? 1.1 : z + 0.7;
+		    z = z - 0.03 <= 0 ? 0 : z- 0.03;
 		  }
 	
 }

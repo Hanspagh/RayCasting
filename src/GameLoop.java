@@ -10,86 +10,45 @@ import java.awt.event.KeyListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-public class GameLoopTest extends JFrame implements ActionListener
+public class GameLoop extends JFrame
 {
-   private Game gamePanel = new Game();
-   private JButton startButton = new JButton("Start");
-   private JButton quitButton = new JButton("Quit");
-   private JButton pauseButton = new JButton("Pause");
+   private Game gamePanel;
    private boolean running = false;
    private boolean paused = false;
    private int fps = 60;
    private int frameCount = 0;
+   private final int height = 800;
+   private final int width = 1200;
    
-   public GameLoopTest()
+   public GameLoop()
    {
-      super("Fixed Timestep Game Loop Test");
+      super("LUL game");
       Container cp = getContentPane();
       cp.setLayout(new BorderLayout());
-      JPanel p = new JPanel();
-      p.setLayout(new GridLayout(1,2));
-      p.add(startButton);
-      p.add(pauseButton);
-      p.add(quitButton);
-     
-      cp.add(p, BorderLayout.SOUTH);
-      setSize(800, 800);
+      setSize(width, height);
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      startButton.addActionListener(this);
-      quitButton.addActionListener(this);
-      pauseButton.addActionListener(this);
       cp.setFocusable(false);
+      gamePanel = new Game(width,height);
+      cp.add(gamePanel, BorderLayout.CENTER);
       gamePanel.setFocusable(true);
       gamePanel.addKeyListener(gamePanel.controls);
-      cp.add(gamePanel, BorderLayout.CENTER);
       gamePanel.requestFocus();
       gamePanel.setVisible(true);
-
-      //gamePanel.addKeyListener(gamePanel.controls);
-      //gamePanel.requestFocus();
+      
+      //Start the game loop
+      running = true;
       runGameLoop();
+      
+      gamePanel.requestFocus();
+
    }
    
    public static void main(String[] args)
    {
-      GameLoopTest glt = new GameLoopTest();
+      GameLoop glt = new GameLoop();
       glt.setVisible(true);
    }
    
-   public void actionPerformed(ActionEvent e)
-   {
-      Object s = e.getSource();
-      if (s == startButton)
-      {
-         running = !running;
-         if (running)
-         {
-            startButton.setText("Stop");
-            runGameLoop();
-         }
-         else
-         {
-            startButton.setText("Start");
-         }
-         gamePanel.requestFocus();
-      }
-      else if (s == pauseButton)
-      {
-        paused = !paused;
-         if (paused)
-         {
-            pauseButton.setText("Unpause");
-         }
-         else
-         {
-            pauseButton.setText("Pause");
-         }
-      }
-      else if (s == quitButton)
-      {
-         System.exit(0);
-      }
-   }
    
    //Starts a new thread and runs the game loop in it.
    public void runGameLoop()
@@ -157,7 +116,7 @@ public class GameLoopTest extends JFrame implements ActionListener
             int thisSecond = (int) (lastUpdateTime / 1000000000);
             if (thisSecond > lastSecondTime)
             {
-               System.out.println("NEW SECOND " + thisSecond + " " + frameCount);
+               //System.out.println("NEW SECOND " + thisSecond + " " + frameCount);
                fps = frameCount;
                frameCount = 0;
                lastSecondTime = thisSecond;
@@ -190,52 +149,5 @@ public class GameLoopTest extends JFrame implements ActionListener
       gamePanel.repaint();
    }
 
-
-
-public class Game extends JPanel {
-	private Map map;
-	private Player player;
-	private Camara camara;
-	public Controls controls;
-	private int height = 800;
-	private int width = 800;
-	private boolean gameRunning = true;
-	private long lastFpsTime;
-	private int fps;
-	private float interpolation;
-	
-	
-	public Game() {
-		
-		camara = new Camara(320,0.8,height,width);
-		player = new Player(2, 2, Math.PI * 0.3);
-		map = new Map(32);	
-		controls = new Controls();
-		addKeyListener(controls);
-		
-	
-	}
-	
-    public void setInterpolation(float interp)
-    {
-       interpolation = interp;
-    }
-
-	private void doGameUpdates(double delta)
-	{
-		player.update(controls,map,delta);
-		
-	}
-	
-	public void paintComponent(Graphics g){
-        g.setColor(getBackground());
-        g.fillRect(0, 0, 800, 800);
-		camara.render(g, player, map);
-        //BS way of clearing out the old rectangle to save CPU.
-
-        g.setColor(Color.YELLOW);
-        g.drawString("FPS: " + fps, 5, 10);
-	}
-}
 	
 }

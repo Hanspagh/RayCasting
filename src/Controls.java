@@ -7,9 +7,11 @@ public class Controls implements KeyListener {
   protected boolean right;
   protected boolean forward;
   protected boolean backward;
+  protected boolean space;
+  protected boolean randomMap;
 
   public Controls() {
-    left = right = forward = backward = false;
+    left = right = forward = space = backward = false;
   }
 
 @Override
@@ -25,6 +27,12 @@ public void keyPressed(KeyEvent e) {
 	}
 	if(e.getKeyCode() == KeyEvent.VK_S) {
 		backward = true;
+	}
+	if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+		space = true;
+	}
+	if(e.getKeyCode() == KeyEvent.VK_R) {
+		randomMap = true;
 	}
 	
 }
@@ -42,6 +50,12 @@ public void keyReleased(KeyEvent e) {
 	}
 	if(e.getKeyCode() == KeyEvent.VK_S) {
 		backward = false;
+	}
+	if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+		space = false;
+	}
+	if(e.getKeyCode() == KeyEvent.VK_R) {
+		randomMap = false;
 	}
 	
 }

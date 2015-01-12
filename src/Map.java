@@ -13,7 +13,7 @@ public class Map {
 	public Map(int size) {
 		this.size = size;
 		grid = new double[size][size];
-		randomize();
+		makeMaze();
 	}
 	
 	public double get(double x, double y) {
@@ -30,9 +30,23 @@ public class Map {
 			}
 		}
 	}
+	
+	public void makeMaze() {
+		MazeGenerator mg = new MazeGenerator(size);
+		grid = mg.generate();
+		
+		
+	}
 
 	public Ray cast(Point p, double angle, double range) {
-	    return new Ray(this, new Step(p.x, p.y, 0, 0, 0, 0, 0), Math.sin(angle), Math.cos(angle), range);
+	    return new Ray(this, new Step(p.x, p.y, p.z, 0, 0, 0, 0, 0), Math.sin(angle), Math.cos(angle), range);
+		
+	}
+
+	public void update(Controls controls) {
+		if(controls.randomMap) {
+			makeMaze();
+		}
 		
 	}
 	
